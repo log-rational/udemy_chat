@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:get_it/get_it.dart';
 
 // Widgets
 import '../widgets/custom_input_fields.dart';
 import '../widgets/rounded_button.dart';
+
+// Providers
+import 'package:udemy_chat/providers/authentication_provider.dart';
+
+// Services
+import 'package:udemy_chat/services/navigation_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -16,11 +24,19 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late double _deviceHeight;
   late double _deviceWidth;
+  String? _email;
+  String? _password;
+  late AuthenticationProvider _auth;
+  late NavigationService _navigation;
+
   final _loginFormKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
+    _auth = Provider.of<AuthenticationProvider>(context);
+    _navigation = GetIt.instance.get<NavigationService>();
+
     return _buildUI();
   }
 
@@ -67,13 +83,18 @@ class _LoginPageState extends State<LoginPage> {
       name: "Login",
       height: _deviceHeight * 0.065,
       width: _deviceWidth * 0.65,
-      onPress: () {});
+      onPress: () {
+        if (_loginFormKey.currentState!.validate()) {
+          print("Email: $_email Password: $_password");
+          _loginFormKey.currentState!.save();
+          print("Email: $_email Password: $_password");
+          _auth.loginUsingEmailAndPassword(_email!, _password!);
+        }
+      });
 
   Widget _registerAccountLink() {
     return GestureDetector(
-        onTap: () {
-          print("tapped");
-        },
+        onTap: () {},
         child: const Text(
           "Don't have an account?",
           style: TextStyle(color: Colors.blue),
@@ -91,13 +112,19 @@ class _LoginPageState extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomTextFormField(
-                onSaved: (_vlaue) {},
+                onSaved: (_vlaue) {
+                  setState(() {
+                    _email = _vlaue;
+                  });
+                },
                 regEx:
                     r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
                 hintText: "Email",
                 obscureText: false),
             CustomTextFormField(
-                onSaved: (_vlaue) {},
+                onSaved: (_vlaue) {
+                  _password = _vlaue;
+                },
                 regEx: r".{8,}",
                 hintText: "Password",
                 obscureText: true),
