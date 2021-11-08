@@ -9,6 +9,7 @@ import 'package:udemy_chat/providers/authentication_provider.dart';
 // Pages
 import './pages/splash_page.dart';
 import './pages/login_page.dart';
+import './pages/home_page.dart';
 
 // Services
 import './services/navigation_service.dart';
@@ -36,7 +37,10 @@ class MainApp extends StatelessWidget {
       child: MaterialApp(
         initialRoute: "/login",
         navigatorKey: NavigationService.navigatorKey,
-        routes: {'/login': (BuildContext _ctx) => LoginPage()},
+        routes: {
+          '/login': (BuildContext _ctx) => LoginPage(),
+          '/home': (BuildContext _ctx) => HomePage(),
+        },
         title: "Force Tracker",
         theme: ThemeData(
             backgroundColor: const Color.fromRGBO(36, 35, 49, 1.0),
