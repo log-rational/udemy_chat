@@ -6,6 +6,7 @@ import 'package:get_it/get_it.dart';
 
 // Services
 import '../services/navigation_service.dart';
+import '../services/media_service.dart';
 
 class SplashPage extends StatefulWidget {
   final VoidCallback onInitializationComplete;
@@ -70,11 +71,14 @@ class _SplashPageState extends State<SplashPage> {
   Future<void> _setup() async {
     WidgetsFlutterBinding.ensureInitialized();
     await Firebase.initializeApp();
+    print("${DateTime.now().toLocal()} :: Firebase Initialised!");
     _registerServices();
   }
 
   void _registerServices() {
     GetIt.instance.registerSingleton<NavigationService>(NavigationService());
-    print("Navigation service Started!");
+    print("${DateTime.now().toLocal()} :: Navigation Service Registered!");
+    GetIt.instance.registerSingleton<MediaService>(MediaService());
+    print("${DateTime.now().toLocal()} :: Media Service Registered!");
   }
 }
