@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 // Packages
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:provider/provider.dart';
+
+// Providers
+import 'package:udemy_chat/providers/authentication_provider.dart';
 
 // Pages
 import './pages/splash_page.dart';
@@ -22,16 +26,24 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: "/login",
-      navigatorKey: NavigationService.navigatorKey,
-      routes: {'/login': (BuildContext _ctx) => LoginPage()},
-      title: "Force Tracker",
-      theme: ThemeData(
-          backgroundColor: const Color.fromRGBO(36, 35, 49, 1.0),
-          scaffoldBackgroundColor: const Color.fromRGBO(36, 35, 49, 1.0),
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-              backgroundColor: Color.fromRGBO(30, 29, 37, 1.0))),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthenticationProvider>(
+            create: (BuildContext _ctx) {
+          return AuthenticationProvider();
+        })
+      ],
+      child: MaterialApp(
+        initialRoute: "/login",
+        navigatorKey: NavigationService.navigatorKey,
+        routes: {'/login': (BuildContext _ctx) => LoginPage()},
+        title: "Force Tracker",
+        theme: ThemeData(
+            backgroundColor: const Color.fromRGBO(36, 35, 49, 1.0),
+            scaffoldBackgroundColor: const Color.fromRGBO(36, 35, 49, 1.0),
+            bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+                backgroundColor: Color.fromRGBO(30, 29, 37, 1.0))),
+      ),
     );
   }
 }
