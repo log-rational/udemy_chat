@@ -12,7 +12,7 @@ class ChatUser {
       required this.name,
       required this.email,
       required this.imageURL,
-      required this.lastActive}) {}
+      required this.lastActive});
 
   factory ChatUser.fromJSON(_json) {
     return ChatUser(
