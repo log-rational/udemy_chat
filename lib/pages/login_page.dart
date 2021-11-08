@@ -41,11 +41,11 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(
               height: _deviceHeight * 0.04,
             ),
-            RoundedButton(
-                name: "Login",
-                height: _deviceHeight * 0.065,
-                width: _deviceWidth * 0.65,
-                onPress: () {})
+            _loginButton(),
+            SizedBox(
+              height: _deviceHeight * 0.02,
+            ),
+            _registerAccountLink()
           ],
         ),
       ),
@@ -63,8 +63,25 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+  Widget _loginButton() => RoundedButton(
+      name: "Login",
+      height: _deviceHeight * 0.065,
+      width: _deviceWidth * 0.65,
+      onPress: () {});
+
+  Widget _registerAccountLink() {
+    return GestureDetector(
+        onTap: () {
+          print("tapped");
+        },
+        child: const Text(
+          "Don't have an account?",
+          style: TextStyle(color: Colors.blue),
+        ));
+  }
+
   Widget _loginForm() {
-    return Container(
+    return SizedBox(
       height: _deviceHeight * 0.18,
       child: Form(
         key: _loginFormKey,
