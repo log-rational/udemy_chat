@@ -86,18 +86,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _profileImageField() {
     return GestureDetector(
-      onTap: () {
-        GetIt.instance.get<MediaService>().pickImageFromLibrary().then(
-          (_file) {
-            setState(
-              () {
-                print(_file);
-                _profileImage = _file;
-                print(":::>> New Image.");
-              },
-            );
-          },
-        );
+      onTap: () async {
+        PlatformFile _file = await GetIt.instance
+            .get<MediaService>()
+            .pickImageFromLibrary() as PlatformFile;
+        setState(() => _profileImage = _file);
       },
       child: () {
         if (_profileImage != null) {
