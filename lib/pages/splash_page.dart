@@ -1,5 +1,11 @@
+// Packages
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:get_it/get_it.dart';
+
+// Services
+import '../services/navigation_service.dart';
 
 class SplashPage extends StatefulWidget {
   final VoidCallback onInitializationComplete;
@@ -13,6 +19,12 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  @override
+  void initState() {
+    super.initState();
+    _setup().then((_) => widget.onInitializationComplete());
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -53,5 +65,16 @@ class _SplashPageState extends State<SplashPage> {
         ),
       ),
     );
+  }
+
+  Future<void> _setup() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    _registerServices();
+  }
+
+  void _registerServices() {
+    GetIt.instance.registerSingleton<NavigationService>(NavigationService());
+    print("Navigation service Started!");
   }
 }
