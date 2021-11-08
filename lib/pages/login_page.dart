@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 // Widgets
 import '../widgets/custom_input_fields.dart';
+import '../widgets/rounded_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -34,14 +35,25 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [_pageTitle(), _loginForm()],
+          children: [
+            _pageTitle(),
+            _loginForm(),
+            SizedBox(
+              height: _deviceHeight * 0.04,
+            ),
+            RoundedButton(
+                name: "Login",
+                height: _deviceHeight * 0.065,
+                width: _deviceWidth * 0.65,
+                onPress: () {})
+          ],
         ),
       ),
     );
   }
 
   Widget _pageTitle() {
-    return Container(
+    return SizedBox(
       height: _deviceHeight * 0.1,
       child: const Text(
         "Force Tracker",
