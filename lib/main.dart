@@ -10,6 +10,7 @@ import 'package:udemy_chat/providers/authentication_provider.dart';
 import './pages/splash_page.dart';
 import './pages/login_page.dart';
 import './pages/home_page.dart';
+import './pages/register_page.dart';
 
 // Services
 import './services/navigation_service.dart';
@@ -40,6 +41,7 @@ class MainApp extends StatelessWidget {
         routes: {
           '/login': (BuildContext _ctx) => LoginPage(),
           '/home': (BuildContext _ctx) => HomePage(),
+          '/register': (BuildContext _ctx) => RegisterPage()
         },
         title: "Force Tracker",
         theme: ThemeData(
