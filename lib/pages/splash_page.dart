@@ -78,18 +78,23 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void _registerServices() {
-    GetIt.instance.registerSingleton<NavigationService>(NavigationService());
-    print("${DateTime.now().toLocal()} :: Navigation Service Registered!");
-    GetIt.instance.registerSingleton<MediaService>(MediaService());
-    print("${DateTime.now().toLocal()} :: Media Service Registered!");
-
-    GetIt.instance
-        .registerSingleton<CloudStorageService>(CloudStorageService());
-    print("${DateTime.now().toLocal()} :: Cloud Storage Service registered!");
-    GetIt.instance
-        .registerSingleton<CloudStorageService>(CloudStorageService());
-    print("${DateTime.now().toLocal()} :: Cloud Storage Service registered!");
-    GetIt.instance.registerSingleton<DatabaseService>(DatabaseService());
-    print("${DateTime.now().toLocal()} :: Database Service registered!");
+    if (!GetIt.I.isRegistered<NavigationService>()) {
+      GetIt.instance.registerSingleton<NavigationService>(NavigationService());
+      print("${DateTime.now().toLocal()} :: Navigation Service Registered!");
+    }
+    if (!GetIt.I.isRegistered<MediaService>()) {
+      GetIt.instance.registerSingleton<MediaService>(MediaService());
+      print("${DateTime.now().toLocal()} :: Media Service Registered!");
+    }
+    if (!GetIt.I.isRegistered<CloudStorageService>()) {
+      GetIt.instance
+          .registerSingleton<CloudStorageService>(CloudStorageService());
+      print("${DateTime.now().toLocal()} :: Cloud Storage Service registered!");
+    }
+    if (!GetIt.I.isRegistered<DatabaseService>()) {
+      GetIt.instance.registerSingleton<DatabaseService>(DatabaseService());
+      print(
+          "${DateTime.now().toLocal()} :: Database Storage Service registered!");
+    }
   }
 }
