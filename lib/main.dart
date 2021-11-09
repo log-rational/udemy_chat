@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 // Providers
 import 'package:udemy_chat/providers/authentication_provider.dart';
 import 'package:udemy_chat/providers/beacon_state_provider.dart';
+import 'package:udemy_chat/providers/ticker_provider.dart';
 
 // Pages
 import './pages/splash_page.dart';
@@ -38,6 +39,8 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider<BeaconProvider>(
           create: (_) => BeaconProvider(),
         ),
+        ChangeNotifierProvider<CustomTickerProvider>(
+            create: (_) => CustomTickerProvider())
       ],
       child: MaterialApp(
         initialRoute: "/login",
