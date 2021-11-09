@@ -125,7 +125,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 onSaved: (_val) {
                   _name = _val;
                 },
-                regEx: r".{8,}",
+                regEx: r".{1,}",
                 hintText: "Name",
                 obscureText: false),
             CustomTextFormField(
@@ -140,7 +140,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 onSaved: (_val) {
                   _password = _val;
                 },
-                regEx: r".{8,}",
+                regEx: r".{3,}",
                 hintText: "Password",
                 obscureText: true),
           ],
