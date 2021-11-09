@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildUI() {
     return Scaffold(
       appBar: AppBar(
-        title: Text("force tracker".toUpperCase()),
+        title: Text("Force Tracker Home"),
       ),
     );
   }

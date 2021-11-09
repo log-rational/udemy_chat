@@ -46,6 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _db = GetIt.instance.get<DatabaseService>();
     _cloudStorage = GetIt.instance.get<CloudStorageService>();
     _navigation = GetIt.instance.get<NavigationService>();
+    _navigation = GetIt.instance.get<NavigationService>();
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     return _buildUI();
@@ -70,11 +71,11 @@ class _RegisterPageState extends State<RegisterPage> {
             SizedBox(
               height: _deviceHeight * 0.05,
             ),
-            // _registerForm(),
+            _registerForm(),
             SizedBox(
               height: _deviceHeight * 0.05,
             ),
-            // _registerButton(),
+            _registerButton(),
             SizedBox(
               height: _deviceHeight * 0.02,
             ),
@@ -108,5 +109,63 @@ class _RegisterPageState extends State<RegisterPage> {
         }
       }(),
     );
+  }
+
+  Widget _registerForm() {
+    return Container(
+      height: _deviceHeight * 0.35,
+      child: Form(
+        key: _registerFormKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CustomTextFormField(
+                onSaved: (_val) {
+                  _name = _val;
+                },
+                regEx: r".{8,}",
+                hintText: "Name",
+                obscureText: false),
+            CustomTextFormField(
+                onSaved: (_val) {
+                  _email = _val;
+                },
+                regEx:
+                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+",
+                hintText: "Email",
+                obscureText: false),
+            CustomTextFormField(
+                onSaved: (_val) {
+                  _password = _val;
+                },
+                regEx: r".{8,}",
+                hintText: "Password",
+                obscureText: true),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _registerButton() {
+    return RoundedButton(
+        key: UniqueKey(),
+        name: "Register",
+        height: _deviceHeight * .065,
+        width: _deviceWidth * .65,
+        onPress: () async {
+          if (_registerFormKey.currentState!.validate() &&
+              _profileImage != null) {
+            _registerFormKey.currentState!.save();
+            String? _uid = await _auth.registerUserUsingEmailAndPassword(
+                _email!, _password!);
+            String? _imageUrl = await _cloudStorage.saveUserImageToStorage(
+                _uid!, _profileImage!);
+            await _db.registerUser(_uid, _name!, _email!, _imageUrl!);
+            _navigation.navigateToRoute("/home");
+          }
+        });
   }
 }

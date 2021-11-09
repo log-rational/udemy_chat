@@ -10,7 +10,7 @@ class CustomTextFormField extends StatelessWidget {
       {required this.onSaved,
       required this.regEx,
       required this.hintText,
-      required this.obscureText}) {}
+      required this.obscureText});
 
   @override
   Widget build(BuildContext context) {
