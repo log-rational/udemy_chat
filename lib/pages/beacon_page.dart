@@ -1,15 +1,13 @@
 // packages
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:get_it/get_it.dart';
 import '../providers/beacon_state_provider.dart';
-import 'package:provider/provider.dart';
 
 // Provider
 import '../providers/authentication_provider.dart';
 
 class BeaconPage extends StatefulWidget {
-  BeaconPage({Key? key}) : super(key: key);
+  const BeaconPage({Key? key}) : super(key: key);
 
   @override
   _BeaconPageState createState() => _BeaconPageState();
@@ -58,7 +56,7 @@ class _BeaconPageState extends State<BeaconPage> {
                       vertical: _deviceHeight * 0.02),
                   child: Text(
                     _beacon.emitting ? "Turn Off" : "Turn On",
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                     ),
                   ),
