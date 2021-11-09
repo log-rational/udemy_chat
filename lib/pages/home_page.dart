@@ -33,9 +33,6 @@ class _HomePageState extends State<HomePage> {
   Widget _buildUI() {
     return Scaffold(
       body: _pages[_currentPage],
-      appBar: AppBar(
-        title: Text("Force Tracker Home"),
-      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentPage,
         onTap: (_index) {
