@@ -4,12 +4,14 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 // Model
 import 'package:udemy_chat/models/chat_user.dart';
+import 'package:udemy_chat/providers/beacon_state_provider.dart';
 // Provider
 import '../providers/authentication_provider.dart';
 
 // Pages
 import './chat_page.dart';
 import './user_page.dart';
+import './beacon_page.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -21,6 +23,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentPage = 0;
   final List<Widget> _pages = [
+    BeaconPage(),
     ChatPage(),
     UserPage(),
   ];
@@ -41,6 +44,10 @@ class _HomePageState extends State<HomePage> {
           });
         },
         items: const [
+          BottomNavigationBarItem(
+            label: "Beacon",
+            icon: Icon(Icons.location_on_sharp),
+          ),
           BottomNavigationBarItem(
             label: "Chats",
             icon: Icon(Icons.chat_bubble_sharp),

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
+import 'package:udemy_chat/providers/beacon_state_provider.dart';
 
 // Services
 import '../services/navigation_service.dart';
