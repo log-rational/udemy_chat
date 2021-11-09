@@ -1,11 +1,24 @@
+import 'dart:math';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'dart:async';
 
+import 'package:udemy_chat/services/database_service.dart';
+
 class BeaconProvider with ChangeNotifier {
+  late final FirebaseAuth _auth;
+  late final DatabaseService _databaseService;
   late Map<String, bool> _emitting;
   late Timer _timer;
+  late String _uid;
 
   BeaconProvider() {
+    _auth = FirebaseAuth.instance;
+    _databaseService = GetIt.instance.get<DatabaseService>();
+
     _emitting = {
       "state": true,
     };
@@ -45,8 +58,15 @@ class BeaconProvider with ChangeNotifier {
   }
 
   Timer initTimer() {
-    return Timer.periodic(const Duration(seconds: 1), (timer) {
+    return Timer.periodic(const Duration(seconds: 2), (timer) {
       // TODO implement coordinates push feature
+      debugPrint(_auth.currentUser!.uid.toString());
+      _uid = _auth.currentUser!.uid;
+      // var _user = _databaseService.getUser(_auth.currentUser!.uid);
+      _databaseService.updateLocation(
+          _uid, [Random().nextDouble() * 100, Random().nextDouble() * 100]);
+      _databaseService.updateUserLastSeenTime(_uid);
+
       debugPrint(timer.tick.toString());
     });
   }

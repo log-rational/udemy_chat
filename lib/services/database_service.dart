@@ -38,4 +38,15 @@ class DatabaseService {
       print(e);
     }
   }
+
+  Future<void> updateLocation(String _uid, List<double> _coords) async {
+    try {
+      await _db.collection(USER_COLLECTION).doc(_uid).update({
+        'location': [..._coords],
+      });
+      return;
+    } catch (e) {
+      print(e);
+    }
+  }
 }
