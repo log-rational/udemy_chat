@@ -7,6 +7,10 @@ import 'package:udemy_chat/models/chat_user.dart';
 // Provider
 import '../providers/authentication_provider.dart';
 
+// Pages
+import './chat_page.dart';
+import './user_page.dart';
+
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
 
@@ -17,12 +21,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _currentPage = 0;
   final List<Widget> _pages = [
-    Container(
-      color: Colors.red,
-    ),
-    Container(
-      color: Colors.green,
-    ),
+    ChatPage(),
+    UserPage(),
   ];
   @override
   Widget build(BuildContext context) {
