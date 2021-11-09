@@ -22,11 +22,18 @@ class AuthenticationProvider extends ChangeNotifier {
 
     _auth.signOut();
     _auth.authStateChanges().listen((_user) {
+      print("USER::$_user");
       if (_user != null) {
         _databaseService.updateUserLastSeenTime(_user.uid);
+        _navigationService.removeAndNavigateToRoute('/home');
+
         _databaseService.getUser(_user.uid).then((_snapshot) {
+          if (_snapshot.data() == null) {
+            return;
+          }
           Map<String, dynamic> _userData =
-              _snapshot.data()! as Map<String, dynamic>;
+              _snapshot.data() as Map<String, dynamic>;
+
           // print((_userData['last_active'].toDate().runtimeType));
           user = ChatUser.fromJSON({
             "uid": _user.uid,
@@ -35,8 +42,6 @@ class AuthenticationProvider extends ChangeNotifier {
             "image": _userData['image'],
             "last_active": _userData['last_active']
           });
-          _navigationService.removeAndNavigateToRoute('/home');
-          return;
         });
       } else {
         _navigationService.removeAndNavigateToRoute('/login');

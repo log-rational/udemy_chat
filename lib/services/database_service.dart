@@ -33,6 +33,7 @@ class DatabaseService {
       await _db.collection(USER_COLLECTION).doc(_uid).update({
         'last_active': DateTime.now().toUtc(),
       });
+      return;
     } catch (e) {
       print(e);
     }
