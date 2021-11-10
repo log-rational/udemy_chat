@@ -8,6 +8,7 @@ import '../widgets/rounded_button.dart';
 
 // Providers
 import 'package:udemy_chat/providers/authentication_provider.dart';
+import '../providers/beacon_state_provider.dart';
 
 // Services
 import 'package:udemy_chat/services/navigation_service.dart';
@@ -28,6 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   String? _password;
   late AuthenticationProvider _auth;
   late NavigationService _navigation;
+  late BeaconProvider _beaconProvider;
 
   final _loginFormKey = GlobalKey<FormState>();
   @override
@@ -36,7 +38,8 @@ class _LoginPageState extends State<LoginPage> {
     _deviceWidth = MediaQuery.of(context).size.width;
     _auth = Provider.of<AuthenticationProvider>(context);
     _navigation = GetIt.instance.get<NavigationService>();
-
+    _beaconProvider = Provider.of<BeaconProvider>(context);
+    _beaconProvider.cancelTimer();
     return _buildUI();
   }
 
@@ -85,9 +88,7 @@ class _LoginPageState extends State<LoginPage> {
       width: _deviceWidth * 0.65,
       onPress: () {
         if (_loginFormKey.currentState!.validate()) {
-          print("Email: $_email Password: $_password");
           _loginFormKey.currentState!.save();
-          print("Email: $_email Password: $_password");
           _auth.loginUsingEmailAndPassword(_email!, _password!);
         }
       });

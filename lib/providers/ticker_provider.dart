@@ -12,7 +12,7 @@ class CustomTickerProvider extends State
   initState() {
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
     _animationController.repeat(
       reverse: true,
@@ -26,9 +26,7 @@ class CustomTickerProvider extends State
   }
 
   @override
-  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
-
   Animation get animation {
     return _animation;
   }

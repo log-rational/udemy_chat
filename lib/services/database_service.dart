@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get_it/get_it.dart';
+import './navigation_service.dart';
 
 const String USER_COLLECTION = "Users";
 const String CHAT_COLLECTION = "Chats";
@@ -6,9 +8,11 @@ const String MESSAGES_COLLECTION = "Messages";
 
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-
+  late NavigationService _navigation;
   // Constructor
-  DatabaseService();
+  DatabaseService() {
+    _navigation = GetIt.instance.get<NavigationService>();
+  }
 
   Future<void> registerUser(
       String _uid, String _name, String _email, String _imageUrl) async {
@@ -20,7 +24,7 @@ class DatabaseService {
         'last_active': DateTime.now().toUtc(),
       });
     } catch (e) {
-      print(e);
+      _navigation.removeAndNavigateToRoute("/login");
     }
   }
 
@@ -35,7 +39,7 @@ class DatabaseService {
       });
       return;
     } catch (e) {
-      print(e);
+      _navigation.removeAndNavigateToRoute('/login');
     }
   }
 
@@ -46,7 +50,7 @@ class DatabaseService {
       });
       return;
     } catch (e) {
-      print(e);
+      _navigation.removeAndNavigateToRoute('/login');
     }
   }
 }

@@ -5,6 +5,10 @@ import '../providers/beacon_state_provider.dart';
 
 // Provider
 import '../providers/authentication_provider.dart';
+import '../providers/ticker_provider.dart';
+
+// Widgets
+import '../pages/top_bar.dart';
 
 class BeaconPage extends StatefulWidget {
   const BeaconPage({Key? key}) : super(key: key);
@@ -24,8 +28,10 @@ class _BeaconPageState extends State<BeaconPage> {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     _auth = Provider.of<AuthenticationProvider>(context);
-
     _beacon = Provider.of<BeaconProvider>(context);
+
+    _beacon.initLocationEmmit();
+
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: _deviceWidth * 0.03,
@@ -35,9 +41,19 @@ class _BeaconPageState extends State<BeaconPage> {
       width: _deviceWidth * 0.98,
       child: Column(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          TopBar(
+            "Force Tracker",
+            primaryAction: IconButton(
+              icon: const Icon(Icons.logout,
+                  color: Color.fromRGBO(0, 82, 218, 1.0)),
+              onPressed: () {
+                _auth.logout();
+              },
+            ),
+          ),
           Center(
             child: Column(children: [
               SizedBox(

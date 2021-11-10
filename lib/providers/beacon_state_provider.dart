@@ -59,15 +59,18 @@ class BeaconProvider with ChangeNotifier {
 
   Timer initTimer() {
     return Timer.periodic(const Duration(seconds: 2), (timer) {
-      // TODO implement coordinates push feature
-      debugPrint(_auth.currentUser!.uid.toString());
       _uid = _auth.currentUser!.uid;
-      // var _user = _databaseService.getUser(_auth.currentUser!.uid);
       _databaseService.updateLocation(
           _uid, [Random().nextDouble() * 100, Random().nextDouble() * 100]);
       _databaseService.updateUserLastSeenTime(_uid);
 
       debugPrint(timer.tick.toString());
     });
+  }
+
+  void cancelTimer() {
+    if (_timer.isActive) {
+      _timer.cancel();
+    }
   }
 }

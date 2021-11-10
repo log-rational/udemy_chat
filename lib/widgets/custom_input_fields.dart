@@ -30,7 +30,7 @@ class CustomTextFormField extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
               borderSide: BorderSide.none),
           hintText: hintText,
-          hintStyle: const TextStyle(color: Colors.white, fontSize: 14)),
+          hintStyle: const TextStyle(color: Colors.white60, fontSize: 14)),
     );
   }
 }
