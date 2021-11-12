@@ -1,11 +1,11 @@
 // packages
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
-import '../providers/beacon_state_provider.dart';
+import 'package:udemy_chat/services/beacon_service.dart';
 
 // Provider
 import '../providers/authentication_provider.dart';
-import '../providers/ticker_provider.dart';
 
 // Widgets
 import '../pages/top_bar.dart';
@@ -21,16 +21,17 @@ class _BeaconPageState extends State<BeaconPage> {
   late double _deviceHeight;
   late double _deviceWidth;
   late AuthenticationProvider _auth;
-  late BeaconProvider _beacon;
+  late BeaconService _beacon;
+  late bool _emitting;
 
   @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     _auth = Provider.of<AuthenticationProvider>(context);
-    _beacon = Provider.of<BeaconProvider>(context);
+    _beacon = GetIt.instance.get<BeaconService>();
 
-    _beacon.initLocationEmmit();
+    _emitting = _beacon.emitting;
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -50,7 +51,9 @@ class _BeaconPageState extends State<BeaconPage> {
               icon: const Icon(Icons.logout,
                   color: Color.fromRGBO(0, 82, 218, 1.0)),
               onPressed: () {
+                print(_auth.user);
                 _auth.logout();
+                print(_auth.user);
               },
             ),
           ),
@@ -65,13 +68,13 @@ class _BeaconPageState extends State<BeaconPage> {
               ),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: _beacon.emitting ? Colors.red : Colors.blue),
+                    primary: _emitting ? Colors.red : Colors.blue),
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                       horizontal: _deviceWidth * 0.02,
                       vertical: _deviceHeight * 0.02),
                   child: Text(
-                    _beacon.emitting ? "Turn Off" : "Turn On",
+                    _emitting ? "Turn Off" : "Turn On",
                     style: const TextStyle(
                       fontSize: 20,
                     ),
@@ -79,6 +82,9 @@ class _BeaconPageState extends State<BeaconPage> {
                 ),
                 onPressed: () {
                   _beacon.toggle();
+                  setState(() {
+                    _emitting = !_emitting;
+                  });
                 },
               ),
             ]),
@@ -92,11 +98,11 @@ class _BeaconPageState extends State<BeaconPage> {
 class AnimatedCircle extends StatefulWidget {
   const AnimatedCircle({
     Key? key,
-    required BeaconProvider beacon,
+    required beacon,
   })  : _beacon = beacon,
         super(key: key);
 
-  final BeaconProvider _beacon;
+  final BeaconService _beacon;
 
   @override
   State<AnimatedCircle> createState() => _AnimatedCircleState();

@@ -42,9 +42,6 @@ class RoundedImageFile extends StatelessWidget {
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    print("::build::");
-    print(image);
-
     return Container(
       width: size,
       height: size,

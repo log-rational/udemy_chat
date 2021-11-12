@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:get_it/get_it.dart';
+import 'package:udemy_chat/services/beacon_service.dart';
 
 // Widgets
 import '../widgets/custom_input_fields.dart';
@@ -8,7 +9,6 @@ import '../widgets/rounded_button.dart';
 
 // Providers
 import 'package:udemy_chat/providers/authentication_provider.dart';
-import '../providers/beacon_state_provider.dart';
 
 // Services
 import 'package:udemy_chat/services/navigation_service.dart';
@@ -29,8 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   String? _password;
   late AuthenticationProvider _auth;
   late NavigationService _navigation;
-  late BeaconProvider _beaconProvider;
-
+  late BeaconService _beacon;
   final _loginFormKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -38,8 +37,7 @@ class _LoginPageState extends State<LoginPage> {
     _deviceWidth = MediaQuery.of(context).size.width;
     _auth = Provider.of<AuthenticationProvider>(context);
     _navigation = GetIt.instance.get<NavigationService>();
-    _beaconProvider = Provider.of<BeaconProvider>(context);
-    _beaconProvider.cancelTimer();
+    _beacon = GetIt.instance.get<BeaconService>();
     return _buildUI();
   }
 
@@ -90,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
         if (_loginFormKey.currentState!.validate()) {
           _loginFormKey.currentState!.save();
           _auth.loginUsingEmailAndPassword(_email!, _password!);
+          _beacon.turnOn();
         }
       });
 

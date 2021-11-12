@@ -4,14 +4,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:udemy_chat/models/chat_user.dart';
-import 'package:udemy_chat/providers/ticker_provider.dart';
 
 // Services
 import '../services/database_service.dart';
 import '../services/navigation_service.dart';
+import '../services/beacon_service.dart';
 
 // Proviers
-import '../providers/ticker_provider.dart';
+
+// Pages
+import '../pages/beacon_page.dart';
 
 class AuthenticationProvider extends ChangeNotifier {
   late final FirebaseAuth _auth;
@@ -25,8 +27,6 @@ class AuthenticationProvider extends ChangeNotifier {
     _databaseService = GetIt.instance.get<DatabaseService>();
 
     _auth.authStateChanges().listen((_user) {
-      debugPrint("::SIGNED OUT:::");
-      debugPrint("$_user");
       if (_user != null) {
         _databaseService.updateUserLastSeenTime(_user.uid);
         _navigationService.removeAndNavigateToRoute('/home');
@@ -48,9 +48,7 @@ class AuthenticationProvider extends ChangeNotifier {
           });
         });
       } else {
-        _navigationService.navigateToRoute("/login");
-        // _auth.signOut();
-        // _navigationService.removeAndNavigateToRoute('/login');
+        _navigationService.removeAndNavigateToRoute("/login");
       }
     });
   }

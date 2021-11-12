@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 // Model
 import 'package:udemy_chat/models/chat_user.dart';
-import 'package:udemy_chat/providers/beacon_state_provider.dart';
 // Provider
 import '../providers/authentication_provider.dart';
 

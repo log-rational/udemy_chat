@@ -3,13 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
-import 'package:udemy_chat/providers/beacon_state_provider.dart';
 
 // Services
 import '../services/navigation_service.dart';
 import '../services/media_service.dart';
 import '../services/cloud_storage_service.dart';
 import '../services/database_service.dart';
+import '../services/beacon_service.dart';
 
 class SplashPage extends StatefulWidget {
   final VoidCallback onInitializationComplete;
@@ -98,6 +98,11 @@ class _SplashPageState extends State<SplashPage> {
       GetIt.instance.registerSingleton<DatabaseService>(DatabaseService());
       print(
           "${DateTime.now().toLocal()} :: Database Storage Service registered!");
+    }
+    if (!GetIt.I.isRegistered<BeaconService>()) {
+      GetIt.instance.registerSingleton<BeaconService>(BeaconService());
+      print(
+          "${DateTime.now().toLocal()} :: Beacon Service Service registered!");
     }
   }
 }

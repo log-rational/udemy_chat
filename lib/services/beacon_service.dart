@@ -1,21 +1,19 @@
 import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'dart:async';
 
 import 'package:udemy_chat/services/database_service.dart';
 
-class BeaconProvider with ChangeNotifier {
+class BeaconService {
   late final FirebaseAuth _auth;
   late final DatabaseService _databaseService;
   late Map<String, bool> _emitting;
   late Timer _timer;
   late String _uid;
 
-  BeaconProvider() {
+  BeaconService() {
     _auth = FirebaseAuth.instance;
     _databaseService = GetIt.instance.get<DatabaseService>();
 
@@ -32,19 +30,16 @@ class BeaconProvider with ChangeNotifier {
   void turnOff() {
     _emitting['state'] = false;
     initLocationEmmit();
-    notifyListeners();
   }
 
   void turnOn() {
-    initLocationEmmit();
     _emitting['state'] = true;
-    notifyListeners();
+    initLocationEmmit();
   }
 
   void toggle() {
     _emitting['state'] = !emitting;
     initLocationEmmit();
-    notifyListeners();
   }
 
   void initLocationEmmit() {
@@ -59,12 +54,13 @@ class BeaconProvider with ChangeNotifier {
 
   Timer initTimer() {
     return Timer.periodic(const Duration(seconds: 2), (timer) {
+      if (_auth.currentUser == null) return;
       _uid = _auth.currentUser!.uid;
-      _databaseService.updateLocation(
-          _uid, [Random().nextDouble() * 100, Random().nextDouble() * 100]);
-      _databaseService.updateUserLastSeenTime(_uid);
+      // _databaseService.updateLocation(
+      //     _uid, [Random().nextDouble() * 100, Random().nextDouble() * 100]);
+      // _databaseService.updateUserLastSeenTime(_uid);
 
-      debugPrint(timer.tick.toString());
+      print(timer.tick.toString());
     });
   }
 
