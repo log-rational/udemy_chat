@@ -4,7 +4,7 @@ import './navigation_service.dart';
 
 const String USER_COLLECTION = "Users";
 const String CHAT_COLLECTION = "Chats";
-const String MESSAGES_COLLECTION = "Messages";
+const String MESSAGES_COLLECTION = "messages";
 
 class DatabaseService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -52,5 +52,22 @@ class DatabaseService {
     } catch (e) {
       _navigation.removeAndNavigateToRoute('/login');
     }
+  }
+
+  Stream<QuerySnapshot> getChatForUser(String _uid) {
+    return _db
+        .collection(CHAT_COLLECTION)
+        .where('members', arrayContains: _uid)
+        .snapshots();
+  }
+
+  Future<QuerySnapshot> getLastMessageForChat(String _chatId) {
+    return _db
+        .collection(CHAT_COLLECTION)
+        .doc(_chatId)
+        .collection(MESSAGES_COLLECTION)
+        .orderBy('sent_time', descending: true)
+        .limit(1)
+        .get();
   }
 }

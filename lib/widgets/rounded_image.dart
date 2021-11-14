@@ -18,10 +18,9 @@ class RoundedImageNetwork extends StatelessWidget {
       height: size,
       width: size,
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey, width: 2),
         image: const DecorationImage(
           fit: BoxFit.cover,
-          image: AssetImage("assets/images/avatar.png"),
+          image: NetworkImage("https://i.pravatar.cc/300"),
         ),
         borderRadius: BorderRadius.all(
           Radius.circular(size),
@@ -46,7 +45,9 @@ class RoundedImageFile extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey, width: 2),
+        border: Border.all(
+          color: Colors.grey,
+        ),
         image: DecorationImage(
           fit: BoxFit.cover,
           image: FileImage(File(image.path)),
@@ -75,8 +76,8 @@ class RoundedImageNetworkWithStatusIndicator extends RoundedImageNetwork {
       children: [
         super.build(context),
         Container(
-          height: size * 0.20,
-          width: size * 0.20,
+          height: size * 0.30,
+          width: size * 0.30,
           decoration: BoxDecoration(
             color: isActive ? Colors.green : Colors.red,
             borderRadius: BorderRadius.circular(size),
