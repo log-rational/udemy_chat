@@ -1,6 +1,7 @@
 // Packages
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:udemy_chat/widgets/message_bubble.dart';
 
 // Widgets
 import 'rounded_image.dart';
@@ -66,6 +67,60 @@ class CustomListViewTileWithActivity extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
+    );
+  }
+}
+
+class CustomChatListViewTile extends StatelessWidget {
+  final double width;
+  final double deviceHeight;
+  final bool isOwnMessage;
+  final ChatMessage message;
+  final ChatUser sender;
+
+  CustomChatListViewTile({
+    required this.width,
+    required this.deviceHeight,
+    required this.isOwnMessage,
+    required this.message,
+    required this.sender,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(bottom: 10),
+      width: width,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment:
+            isOwnMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          !isOwnMessage
+              ? RoundedImageNetwork(
+                  key: UniqueKey(),
+                  imagePath: sender.imageURL,
+                  size: width * 0.08)
+              : Container(),
+          SizedBox(
+            width: width * 0.05,
+          ),
+          message.type == MessageType.TEXT
+              ? TextMessageBubble(
+                  isOwnMessage: isOwnMessage,
+                  height: deviceHeight * 0.06,
+                  width: width * .95,
+                  message: message,
+                )
+              : ImageMessageBubble(
+                  isOwnMessage: isOwnMessage,
+                  height: deviceHeight * 0.06,
+                  width: width * .95,
+                  message: message,
+                )
+        ],
+      ),
     );
   }
 }

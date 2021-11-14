@@ -86,17 +86,22 @@ class _ChatPageState extends State<ChatPage> {
                         Icons.delete,
                         color: Colors.blue,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        _chatPageProvider.deleteChat();
+                      },
                     ),
                     secondaryAction: IconButton(
                       icon: const Icon(
                         Icons.arrow_back,
                         color: Colors.blue,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        _chatPageProvider.goBack();
+                      },
                     ),
                   ),
-                  _messagesListView()
+                  _messagesListView(),
+                  _sendMessageForm(),
                 ],
               ),
             ),
@@ -120,16 +125,21 @@ class _ChatPageState extends State<ChatPage> {
         return Container(
           height: _deviceHeight * 0.74,
           child: ListView.builder(
+              controller: _messageListViewController,
               itemCount: _chatPageProvider.messages!.length,
               itemBuilder: (BuildContext _context, int _index) {
+                ChatMessage _message = _chatPageProvider.messages![_index];
+                bool _isOwnMessage = _message.senderID == _auth.user.uid;
                 return Container(
-                  child: Text(
-                    _chatPageProvider.messages![_index].content,
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                );
+                    child: CustomChatListViewTile(
+                  deviceHeight: _deviceHeight,
+                  width: _deviceWidth * .8,
+                  message: _message,
+                  isOwnMessage: _isOwnMessage,
+                  sender: widget.chat.members
+                      .where((d) => d.uid == _message.senderID)
+                      .first,
+                ));
               }),
         );
       }
@@ -140,5 +150,84 @@ class _ChatPageState extends State<ChatPage> {
         ),
       );
     }
+  }
+
+  Widget _sendMessageForm() {
+    return Container(
+      height: _deviceHeight * 0.06,
+      decoration: BoxDecoration(
+          color: Color.fromRGBO(30, 29, 37, 1),
+          borderRadius: BorderRadius.circular(100)),
+      margin: EdgeInsets.symmetric(
+        horizontal: _deviceWidth * 0.04,
+      ),
+      child: Form(
+        key: _messageFormState,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _messageTextField(),
+            _sendMessageButton(),
+            _imageMessageButton()
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _messageTextField() {
+    return SizedBox(
+      width: _deviceWidth * 0.65,
+      child: CustomTextFormField(
+        onSaved: (_value) {
+          _chatPageProvider.message = _value;
+        },
+        regEx: r"^(?!\s*$).+",
+        hintText: "type your message",
+        obscureText: false,
+      ),
+    );
+  }
+
+  Widget _sendMessageButton() {
+    double _size = _deviceHeight * 0.04;
+    return Container(
+      height: _size,
+      width: _size,
+      child: IconButton(
+        onPressed: () {
+          if (_messageFormState.currentState!.validate()) {
+            _messageFormState.currentState!.save();
+            _chatPageProvider.sendTextMessage();
+            _messageFormState.currentState!.reset();
+          }
+        },
+        icon: Icon(
+          Icons.send,
+          size: _size / 1.5,
+        ),
+        color: Colors.white,
+      ),
+    );
+  }
+
+  Widget _imageMessageButton() {
+    double _size = _deviceHeight * 0.04;
+    return Container(
+      height: _size,
+      width: _size,
+      child: FloatingActionButton(
+        backgroundColor: const Color.fromRGBO(0, 82, 218, 1),
+        onPressed: () {
+          _chatPageProvider.sendImageMessage();
+        },
+        child: Icon(
+          Icons.camera_enhance,
+          size: _size / 1.5,
+        ),
+      ),
+    );
   }
 }

@@ -38,6 +38,10 @@ class ChatPageProvider extends ChangeNotifier {
     return message;
   }
 
+  set message(String _value) {
+    _message = _value;
+  }
+
   ChatPageProvider(this._chatId, this._auth, this._messagesListViewController) {
     _db = GetIt.instance.get<DatabaseService>();
     _storage = GetIt.instance.get<CloudStorageService>();
@@ -59,6 +63,14 @@ class ChatPageProvider extends ChangeNotifier {
         }).toList();
         messages = _messages;
         notifyListeners();
+        WidgetsBinding.instance!.addPostFrameCallback(
+          (timeStamp) {
+            if (_messagesListViewController.hasClients) {
+              _messagesListViewController
+                  .jumpTo(_messagesListViewController.position.maxScrollExtent);
+            }
+          },
+        );
 
         // Add Scroll to bottom
       });
