@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/date_symbols.dart';
 import 'package:udemy_chat/models/chat.dart';
 import './navigation_service.dart';
 
@@ -112,5 +113,15 @@ class DatabaseService {
     } catch (e) {
       print(e);
     }
+  }
+
+  Future<QuerySnapshot> getUsers({String? name}) {
+    Query _query = _db.collection(USER_COLLECTION);
+    if (name != null) {
+      _query = _query
+          .where("name", isGreaterThanOrEqualTo: name)
+          .where("name", isLessThanOrEqualTo: name + "z");
+    }
+    return _query.get();
   }
 }
