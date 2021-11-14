@@ -79,10 +79,10 @@ class _ChatPageState extends State<ChatPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TopBar(
-                    this.widget.chat.title(),
+                    widget.chat.title(),
                     fontSize: 16,
                     primaryAction: IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.delete,
                         color: Colors.blue,
                       ),
@@ -96,6 +96,7 @@ class _ChatPageState extends State<ChatPage> {
                       onPressed: () {},
                     ),
                   ),
+                  _messagesListView()
                 ],
               ),
             ),
@@ -103,5 +104,41 @@ class _ChatPageState extends State<ChatPage> {
         );
       },
     );
+  }
+
+  Widget _messagesListView() {
+    if (_chatPageProvider.messages != null) {
+      if (_chatPageProvider.messages!.isEmpty) {
+        return const Align(
+          alignment: Alignment.center,
+          child: Text(
+            "Be the first one to say hi!",
+            style: TextStyle(color: Colors.white),
+          ),
+        );
+      } else {
+        return Container(
+          height: _deviceHeight * 0.74,
+          child: ListView.builder(
+              itemCount: _chatPageProvider.messages!.length,
+              itemBuilder: (BuildContext _context, int _index) {
+                return Container(
+                  child: Text(
+                    _chatPageProvider.messages![_index].content,
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                );
+              }),
+        );
+      }
+    } else {
+      return const Center(
+        child: CircularProgressIndicator(
+          color: Colors.white,
+        ),
+      );
+    }
   }
 }
