@@ -26,6 +26,8 @@ class ChatPageProvider extends ChangeNotifier {
   late MediaService _media;
   late NavigationService _navigation;
   late StreamSubscription _messageStream;
+  late StreamSubscription _keyboardVisibilityStream;
+  late KeyboardVisibilityController _keyboardVisibilityController;
 
   AuthenticationProvider _auth;
   late ScrollController _messagesListViewController;
@@ -47,7 +49,9 @@ class ChatPageProvider extends ChangeNotifier {
     _storage = GetIt.instance.get<CloudStorageService>();
     _media = GetIt.instance.get<MediaService>();
     _navigation = GetIt.instance.get<NavigationService>();
+    _keyboardVisibilityController = KeyboardVisibilityController();
     listenToMessage();
+    listenToKeyboardChanges();
   }
 
   void goBack() {
@@ -77,6 +81,13 @@ class ChatPageProvider extends ChangeNotifier {
     } catch (e) {
       print("Error getting messages");
     }
+  }
+
+  void listenToKeyboardChanges() {
+    _keyboardVisibilityStream =
+        _keyboardVisibilityController.onChange.listen((_event) {
+      _db.updateChatData(_chatId, {"is_activity": _event});
+    });
   }
 
   void sendTextMessage() {

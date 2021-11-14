@@ -32,6 +32,7 @@ class CustomListViewTileWithActivity extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(isActive);
     return ListTile(
       onTap: () => onTap(),
       leading: RoundedImageNetworkWithStatusIndicator(

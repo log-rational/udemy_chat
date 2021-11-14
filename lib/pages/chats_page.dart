@@ -120,7 +120,7 @@ class _ChatsPageState extends State<ChatsPage> {
       subtitle: _subtitleText,
       imagePath: "https://i.pravatar.cc/300",
       isActive: _isActive,
-      isActivity: false,
+      isActivity: _chat.activity,
       onTap: () {
         _navigation.navigateToPage(ChatPage(
           chat: _chat,
