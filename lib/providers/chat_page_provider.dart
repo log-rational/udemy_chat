@@ -25,6 +25,7 @@ class ChatPageProvider extends ChangeNotifier {
   late CloudStorageService _storage;
   late MediaService _media;
   late NavigationService _navigation;
+  late StreamSubscription _messageStream;
 
   AuthenticationProvider _auth;
   late ScrollController _messagesListViewController;
@@ -42,15 +43,67 @@ class ChatPageProvider extends ChangeNotifier {
     _storage = GetIt.instance.get<CloudStorageService>();
     _media = GetIt.instance.get<MediaService>();
     _navigation = GetIt.instance.get<NavigationService>();
+    listenToMessage();
   }
 
   void goBack() {
     _navigation.navigateBack();
   }
 
+  void listenToMessage() {
+    try {
+      _messageStream = _db.streamMessageForChat(_chatId).listen((_snapshot) {
+        List<ChatMessage> _messages = _snapshot.docs.map((_m) {
+          Map<String, dynamic> _messageData = _m.data() as Map<String, dynamic>;
+          return ChatMessage.fromJSON(_messageData);
+        }).toList();
+        messages = _messages;
+        notifyListeners();
+
+        // Add Scroll to bottom
+      });
+    } catch (e) {
+      print("Error getting messages");
+    }
+  }
+
+  void sendTextMessage() {
+    if (_message != null) {
+      ChatMessage _messageToSend = ChatMessage(
+          senderID: _auth.user.uid,
+          sentTime: DateTime.now(),
+          content: _message!,
+          type: MessageType.TEXT);
+      _db.addMessageToChat(_chatId, _messageToSend);
+    }
+  }
+
+  void sendImageMessage() async {
+    try {
+      PlatformFile? _file = await _media.pickImageFromLibrary();
+      if (_file != null) {
+        String? _dwnloadURL = await _storage.saveChatImageToStorage(
+            _chatId, _auth.user.uid, _file);
+        ChatMessage _imageToSend = ChatMessage(
+            senderID: _auth.user.uid,
+            sentTime: DateTime.now(),
+            content: _dwnloadURL!,
+            type: MessageType.IMAGE);
+        _db.addMessageToChat(_chatId, _imageToSend);
+      }
+    } catch (e) {
+      print("Error sending image message");
+    }
+  }
+
+  void deleteChat() {
+    _navigation.navigateBack();
+    _db.deleteChat(_chatId);
+  }
+
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
+    _messageStream.cancel();
   }
 }
