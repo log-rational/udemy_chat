@@ -23,7 +23,7 @@ class TopBar extends StatelessWidget {
 
   Widget buildUI() {
     return Container(
-      height: _deviceHeight * 0.10,
+      height: _deviceHeight * 0.15,
       width: _deviceWidth,
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -43,7 +43,7 @@ class TopBar extends StatelessWidget {
       _barTitle,
       overflow: TextOverflow.ellipsis,
       style: TextStyle(
-          color: Colors.white, fontSize: fontSize, fontWeight: FontWeight.w700),
+          color: Colors.white, fontSize: fontSize, fontWeight: FontWeight.w500),
     );
   }
 }

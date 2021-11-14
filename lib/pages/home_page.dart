@@ -8,7 +8,7 @@ import 'package:udemy_chat/models/chat_user.dart';
 import '../providers/authentication_provider.dart';
 
 // Pages
-import './chat_page.dart';
+import 'chats_page.dart';
 import './user_page.dart';
 import './beacon_page.dart';
 
@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   int _currentPage = 0;
   final List<Widget> _pages = [
     BeaconPage(),
-    ChatPage(),
+    ChatsPage(),
     UserPage(),
   ];
   @override

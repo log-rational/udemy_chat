@@ -8,7 +8,7 @@ import 'package:udemy_chat/services/beacon_service.dart';
 import '../providers/authentication_provider.dart';
 
 // Widgets
-import '../pages/top_bar.dart';
+import '../widgets/top_bar.dart';
 
 class BeaconPage extends StatefulWidget {
   const BeaconPage({Key? key}) : super(key: key);
