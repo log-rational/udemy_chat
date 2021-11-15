@@ -118,7 +118,7 @@ class _ChatsPageState extends State<ChatsPage> {
       height: _deviceHeight * 0.1,
       title: _recepients.map((d) => d.name).join(", "),
       subtitle: _subtitleText,
-      imagePath: "https://i.pravatar.cc/300",
+      imagePath: _recepients.first.imageURL,
       isActive: _isActive,
       isActivity: _chat.activity,
       onTap: () {

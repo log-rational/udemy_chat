@@ -39,11 +39,14 @@ class UsersPageProvider extends ChangeNotifier {
     _seletedUsers = [];
     try {
       _db.getUsers(name: name).then((_snapshot) {
-        users = _snapshot.docs.map((_doc) {
-          Map<String, dynamic> _data = _doc.data() as Map<String, dynamic>;
-          _data['uid'] = _doc.id;
-          return ChatUser.fromJSON(_data);
-        }).toList();
+        users = _snapshot.docs
+            .map((_doc) {
+              Map<String, dynamic> _data = _doc.data() as Map<String, dynamic>;
+              _data['uid'] = _doc.id;
+              return ChatUser.fromJSON(_data);
+            })
+            .where((_user) => _user.uid != _auth.user.uid)
+            .toList();
         notifyListeners();
       });
     } catch (e) {

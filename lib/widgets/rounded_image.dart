@@ -18,9 +18,9 @@ class RoundedImageNetwork extends StatelessWidget {
       height: size,
       width: size,
       decoration: BoxDecoration(
-        image: const DecorationImage(
+        image: DecorationImage(
           fit: BoxFit.cover,
-          image: NetworkImage("https://i.pravatar.cc/300"),
+          image: NetworkImage(imagePath),
         ),
         borderRadius: BorderRadius.all(
           Radius.circular(size),
