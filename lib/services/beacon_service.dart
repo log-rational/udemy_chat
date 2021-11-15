@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'dart:async';
+import 'package:location/location.dart';
 
 import 'package:udemy_chat/services/database_service.dart';
 
@@ -12,6 +13,10 @@ class BeaconService {
   late Map<String, bool> _emitting;
   late Timer _timer;
   late String _uid;
+
+  late Location location = Location();
+  late PermissionStatus _permissionGranted;
+  late LocationData _locationData;
 
   BeaconService() {
     _auth = FirebaseAuth.instance;
@@ -52,15 +57,37 @@ class BeaconService {
     }
   }
 
+  Future<Map<String, dynamic>> getLocation() async {
+    bool _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+    }
+    if (!_serviceEnabled) {
+      return {'error': true};
+    }
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return {"error": true};
+      }
+    }
+    _locationData = await location.getLocation();
+    return {
+      'lat': _locationData.latitude,
+      'lng': _locationData.longitude,
+      'heading': _locationData.heading,
+    };
+  }
+
   Timer initTimer() {
-    return Timer.periodic(const Duration(seconds: 2), (timer) {
+    return Timer.periodic(const Duration(seconds: 10), (timer) {
       if (_auth.currentUser == null) return;
       _uid = _auth.currentUser!.uid;
-      // _databaseService.updateLocation(
-      //     _uid, [Random().nextDouble() * 100, Random().nextDouble() * 100]);
-      // _databaseService.updateUserLastSeenTime(_uid);
-
-      print(timer.tick.toString());
+      getLocation().then((_coords) {
+        _databaseService.updateLocation(_uid, [_coords['lng'], _coords['lat']]);
+        _databaseService.updateUserLastSeenTime(_uid);
+      });
     });
   }
 
